@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="NovaPixel — Elite Web, Systems & PC Solutions from Morocco. Full-stack developer, system architect, and custom PC builder.">
+    <meta name="author" content="NovaPixel">
+    <meta property="og:title" content="NovaPixel — Elite Tech Portfolio">
+    <meta property="og:description" content="Web • Systems • PCs • Solutions">
+    <meta property="og:image" content="https://novapixel.dev/og-image.jpg">
+    <meta property="og:url" content="https://novapixel.dev">
+    <meta name="twitter:card" content="summary_large_image">
+    
+    <title>NovaPixel — Elite Tech Portfolio</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" href="star.png" type="image/svg+xml">
+    <link rel="icon" href="favicon.png" type="image/png" sizes="32x32">
+
+    <!-- Preload Critical Images -->
+    <link rel="preload" as="image" href="anonybox.png">
+    <link rel="preload" as="image" href="Shopsys.png">
+    <link rel="preload" as="image" href="Ecommerce.png">
+    <link rel="preload" as="image" href="4090.png">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- GSAP + ScrollTrigger -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    
+    <!-- Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <style>
+        :root{
+            --navy:#0f172a;
+            --amber:#fcd34d;
+            --offwhite:#e7e5e4;
+            --gray:#334155;
+        }
+        *{margin:0;padding:0;box-sizing:border-box;}
+        body{
+            font-family:'Inter',sans-serif;
+            background:var(--navy);
+            color:var(--offwhite);
+            overflow-x:hidden;
+        }
+        .neo{
+            border:5px solid var(--amber);
+            box-shadow:10px 10px 0 var(--amber);
+            transition:all .3s cubic-bezier(.34,1.56,.64,1);
+        }
+        .neo:hover{
+            box-shadow:16px 16px 0 var(--amber);
+            transform:translate(-3px,-3px);
+        }
+        .parallax{
+            background-position:center;
+            background-size:cover;
+            background-repeat:no-repeat;
+            background-attachment:fixed;
+        }
+        .glow{
+            text-shadow:0 0 20px rgba(252,211,77,.6);
+        }
+        .grain{
+            background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.08'/%3E%3C/svg%3E");
+        }
+        .scroll-hint{animation:bounce 2s infinite;}
+        @keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+
+        /* SKILL CARDS */
+        .skill-card{
+            background:var(--navy);
+            padding:2rem;
+            display:flex;
+            flex-direction:column;
+            align-items:center;
+            justify-content:center;
+            text-align:center;
+            height:280px;
+            border-radius:0;
+        }
+        .skill-card i{font-size:4rem;margin-bottom:1rem;color:var(--amber);}
+        .skill-card .bar-bg{
+            height:8px;
+            background:var(--gray);
+            border-radius:4px;
+            overflow:hidden;
+            margin-top:1rem;
+            width:100%;
+        }
+        .skill-card .bar-fill{
+            height:100%;
+            background:var(--amber);
+            width:0;
+            border-radius:4px;
+        }
+
+        /* PROJECT GALLERY */
+        .gallery-wrapper{overflow:hidden;width:100%;}
+        .gallery{
+            display:flex;
+            gap:2rem;
+            align-items:flex-start;
+        }
+        .gallery:hover{animation-play-state:paused;}
+        .gallery-item{
+            min-width:320px;
+            flex-shrink:0;
+            cursor:pointer;
+            transition:transform .25s ease, box-shadow .25s ease;
+        }
+        @media(min-width:768px){.gallery-item{min-width:400px;}}
+        .gallery-item img{transition:transform .35s ease;border-radius:12px;}
+        .gallery-item:hover img{transform:scale(1.03);} 
+
+        /* TYPEWRITER - RESPONSIVE */
+        .typewriter-container {
+            position: relative;
+            min-height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: visible;
+        }
+        .typewriter-text {
+            position: static;
+            font-size: 4.5rem;
+            font-weight: 800;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+            white-space: nowrap;
+        }
+        .typewriter-text.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        @media (min-width: 768px) {
+            .typewriter-text { font-size: 6rem; }
+            .typewriter-container { min-height: 120px; }
+        }
+
+        /* NAVBAR */
+        .nav-transparent {
+            background: transparent;
+            border-color: transparent;
+            box-shadow: none;
+        }
+        .nav-solid {
+            background: rgba(15,23,42,0.95);
+            border-color: var(--amber);
+            box-shadow: 0 4px 6px -1px rgba(252,211,77,0.1);
+        }
+        .nav-link {
+            position: relative;
+            padding: 0.5rem 0;
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 50%;
+            background: var(--amber);
+            transition: all 0.3s ease;
+        }
+        .nav-link:hover::after, .nav-link.active::after {
+            width: 100%;
+            left: 0;
+        }
+        .nav-link.active { color: var(--amber); }
+        .progress-bar {
+            position: fixed;
+            top: 0; left: 0;
+            height: 3px;
+            background: var(--amber);
+            z-index: 1000;
+            transition: width 0.1s ease;
+            width: 0;
+        }
+        .mobile-menu {
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+        }
+        .mobile-menu.active {
+            transform: translateX(0);
+        }
+    </style>
+</head>
+<body class="grain">
+
+<!-- Progress Bar -->
+<div class="progress-bar" id="scrollProgress"></div>
+
+<!-- NAVBAR -->
+<nav id="mainNav" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300 nav-transparent">
+    <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+        <a href="#" class="text-3xl font-black tracking-tighter glow">NovaPixel</a>
+        
+        <!-- Desktop Menu -->
+        <ul class="hidden md:flex space-x-8 text-lg font-medium">
+            <li><a href="#hero" class="nav-link active">Home</a></li>
+            <li><a href="#skills" class="nav-link">Skills</a></li>
+            <li><a href="#projects" class="nav-link">Projects</a></li>
+            <li><a href="#about" class="nav-link">About</a></li>
+            <li><a href="#contact" class="nav-link">Contact</a></li>
+        </ul>
+
+        <!-- Mobile Menu Button -->
+        <button id="menuBtn" class="md:hidden text-2xl focus:outline-none">
+            <i class="fas fa-bars"></i>
+        </button>
+
+        <!-- Mobile Menu Panel -->
+        <div id="mobileMenu" class="mobile-menu fixed top-0 right-0 h-full w-64 bg-[var(--navy)] shadow-lg md:hidden">
+            <div class="p-6">
+                <button id="closeMenu" class="absolute top-4 right-4 text-2xl focus:outline-none">
+                    <i class="fas fa-times"></i>
+                </button>
+                <ul class="space-y-6 mt-12 text-lg">
+                    <li><a href="#hero" class="block nav-link">Home</a></li>
+                    <li><a href="#skills" class="block nav-link">Skills</a></li>
+                    <li><a href="#projects" class="block nav-link">Projects</a></li>
+                    <li><a href="#about" class="block nav-link">About</a></li>
+                    <li><a href="#contact" class="block nav-link">Contact</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<!-- HERO -->
+<section id="hero" class="h-screen flex flex-col items-center justify-center text-center parallax" style="background-image:url('https://images.unsplash.com/photo-1518770660439-4636190af475?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');">
+    <div class="neo p-16 bg-[rgba(15,23,42,0.92)] max-w-5xl mx-auto">
+        <h1 class="text-5xl md:text-7xl lg:text-8xl font-black mb-4 glow leading-tight">
+            <span class="text-[var(--amber)]">I BUILD</span><br>
+            <div class="typewriter-container">
+                <div class="typewriter-text active">SYSTEMS</div>
+                <div class="typewriter-text">WEBPAGES</div>
+                <div class="typewriter-text">PCs</div>
+                <div class="typewriter-text">SOLUTIONS</div>
+            </div>
+        </h1>
+        <p class="text-xl md:text-2xl mb-8 font-light opacity-90">Web • Systems • PCs • Solutions</p>
+        <a href="#contact" class="inline-block bg-[var(--amber)] text-[var(--navy)] px-10 py-4 text-xl font-bold neo hover:shadow-2xl">HIRE ME</a>
+        <div class="mt-12 scroll-hint"><i class="fas fa-chevron-down text-4xl text-[var(--amber)]"></i></div>
+    </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills" class="py-32 bg-[var(--navy)]">
+    <div class="container mx-auto px-6">
+        <h2 class="text-5xl font-black text-center mb-16 glow">SKILLS MATRIX</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
+            <div class="skill-card neo">
+                <i class="fas fa-code"></i>
+                <h3 class="text-2xl font-bold mb-2">Web Dev</h3>
+                <p class="text-sm opacity-80">React • Tailwind • Node • APIs</p>
+                <div class="bar-bg"><div class="bar-fill" data-target="92%"></div></div>
+            </div>
+            <div class="skill-card neo">
+                <i class="fas fa-cogs"></i>
+                <h3 class="text-2xl font-bold mb-2">System Design</h3>
+                <p class="text-sm opacity-80">Architecture • Optimization</p>
+                <div class="bar-bg"><div class="bar-fill" data-target="85%"></div></div>
+            </div>
+            <div class="skill-card neo">
+                <i class="fas fa-microchip"></i>
+                <h3 class="text-2xl font-bold mb-2">PC Building</h3>
+                <p class="text-sm opacity-80">Custom Rigs • Overclocking</p>
+                <div class="bar-bg"><div class="bar-fill" data-target="100%"></div></div>
+            </div>
+            <div class="skill-card neo">
+                <i class="fas fa-wrench"></i>
+                <h3 class="text-2xl font-bold mb-2">Troubleshooting</h3>
+                <p class="text-sm opacity-80">Hardware • Software</p>
+                <div class="bar-bg"><div class="bar-fill" data-target="90%"></div></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects" class="py-32 bg-[url('https://images.unsplash.com/photo-1550745162-54605033e975?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80')] parallax">
+    <div class="container mx-auto px-6">
+        <h2 class="text-5xl font-black text-center mb-16 glow text-white">PROJECT SHOWCASE</h2>
+        <div class="gallery-wrapper">
+            <div class="gallery">
+                <!-- CARD SET -->
+                <div class="neo gallery-item bg-[rgba(15,23,42,0.9)] p-6" onclick="openModal('anonybox')">
+                    <div class="w-full h-48 mb-4 overflow-hidden rounded-xl">
+                        <img src="anonybox.png" alt="Anonybox - Anonymous confession platform" class="w-full h-full object-cover">
+                    </div>
+                    <h3 class="text-xl font-bold">Anonybox</h3>
+                    <p class="text-sm opacity-80">Anonymous confessions webpage.</p>
+                </div>
+                <div class="neo gallery-item bg-[rgba(15,23,42,0.9)] p-6" onclick="openModal('store')">
+                    <div class="w-full h-48 mb-4 overflow-hidden rounded-xl">
+                        <img src="Shopsys.png" alt="Store Management System - Full-stack inventory app" class="w-full h-full object-cover">
+                    </div>
+                    <h3 class="text-xl font-bold">Store Management System</h3>
+                    <p class="text-sm opacity-80">Full-stack inventory app (coming soon).</p>
+                </div>
+                <div class="neo gallery-item bg-[rgba(15,23,42,0.9)] p-6" onclick="openModal('ecommerce')">
+                    <div class="w-full h-48 mb-4 overflow-hidden rounded-xl">
+                        <img src="Ecommerce.png" alt="E-Commerce Platform - React + Node online store" class="w-full h-full object-cover">
+                    </div>
+                    <h3 class="text-xl font-bold">E-Commerce Platform</h3>
+                    <p class="text-sm opacity-80">React + Node online store.</p>
+                </div>
+                <div class="neo gallery-item bg-[rgba(15,23,42,0.9)] p-6" onclick="openModal('gamingpc')">
+                    <div class="w-full h-48 mb-4 overflow-hidden rounded-xl">
+                        <img src="4090.png" alt="Custom Gaming PC - RTX 4090 High-End Build" class="w-full h-full object-cover">
+                    </div>
+                    <h3 class="text-xl font-bold">Custom Gaming PC</h3>
+                    <p class="text-sm opacity-80">High-end build with RTX 4090.</p>
+                </div>
+
+                <!-- DUPLICATE FOR SEAMLESS SCROLL -->
+                <div class="neo gallery-item bg-[rgba(15,23,42,0.9)] p-6" onclick="openModal('anonybox')">
+                    <div class="w-full h-48 mb-4 overflow-hidden rounded-xl">
+                        <img src="anonybox.png" alt="Anonybox - Anonymous confession platform" class="w-full h-full object-cover">
+                    </div>
+                    <h3 class="text-xl font-bold">Anonybox</h3>
+                    <p class="text-sm opacity-80">Anonymous confessions webpage.</p>
+                </div>
+                <div class="neo gallery-item bg-[rgba(15,23,42,0.9)] p-6" onclick="openModal('store')">
+                    <div class="w-full h-48 mb-4 overflow-hidden rounded-xl">
+                        <img src="Shopsys.png" alt="Store Management System - Full-stack inventory app" class="w-full h-full object-cover">
+                    </div>
+                    <h3 class="text-xl font-bold">Store Management System</h3>
+                    <p class="text-sm opacity-80">Full-stack inventory app (coming soon).</p>
+                </div>
+                <div class="neo gallery-item bg-[rgba(15,23,42,0.9)] p-6" onclick="openModal('ecommerce')">
+                    <div class="w-full h-48 mb-4 overflow-hidden rounded-xl">
+                        <img src="Ecommerce.png" alt="E-Commerce Platform - React + Node online store" class="w-full h-full object-cover">
+                    </div>
+                    <h3 class="text-xl font-bold">E-Commerce Platform</h3>
+                    <p class="text-sm opacity-80">React + Node online store.</p>
+                </div>
+                <div class="neo gallery-item bg-[rgba(15,23,42,0.9)] p-6" onclick="openModal('gamingpc')">
+                    <div class="w-full h-48 mb-4 overflow-hidden rounded-xl">
+                        <img src="4090.png" alt="Custom Gaming PC - RTX 4090 High-End Build" class="w-full h-full object-cover">
+                    </div>
+                    <h3 class="text-xl font-bold">Custom Gaming PC</h3>
+                    <p class="text-sm opacity-80">High-end build with RTX 4090.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about" class="py-32 bg-[var(--navy)]">
+    <div class="container mx-auto px-6 max-w-4xl text-center">
+        <h2 class="text-5xl font-black mb-12 glow">WHO AM I?</h2>
+        <div class="neo p-12 bg-gradient-to-br from-[var(--navy)] to-[var(--gray)]">
+            <p class="text-lg leading-relaxed mb-6">
+                Based in <strong class="text-[var(--amber)]">Morocco</strong>, serving clients <strong class="text-[var(--amber)]">globally</strong>.<br>
+                Armed with iFixit Pro Kit, Fluke multimeter, and <strong class="text-[var(--amber)]">5+ years of real-world tech mastery</strong>.
+            </p>
+        </div>
+    </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact" class="py-32 bg-[url('https://images.unsplash.com/photo-1504639725590-34d0984388bd?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80')] parallax">
+    <div class="container mx-auto px-6 max-w-2xl">
+        <h2 class="text-5xl font-black text-center mb-16 glow text-white">LET'S COLLAB</h2>
+        <form id="contactForm" class="neo p-10 bg-[rgba(15,23,42,0.95)] space-y-6">
+            <div class="space-y-2">
+                <input type="text" name="name" id="contactName" placeholder="Name" required 
+                    class="w-full p-4 bg-transparent border-4 border-[var(--amber)] placeholder-gray-400 focus:outline-none focus:border-white transition">
+                <div class="error-message hidden text-red-500 text-sm"></div>
+            </div>
+            <div class="space-y-2">
+                <input type="email" name="email" id="contactEmail" placeholder="Email" required 
+                    class="w-full p-4 bg-transparent border-4 border-[var(--amber)] placeholder-gray-400 focus:outline-none focus:border-white transition">
+                <div class="error-message hidden text-red-500 text-sm"></div>
+            </div>
+            <div class="space-y-2">
+                <textarea name="message" id="contactMessage" placeholder="Your Project Idea..." required 
+                    class="w-full p-4 bg-transparent border-4 border-[var(--amber)] h-40 placeholder-gray-400 focus:outline-none focus:border-white transition"></textarea>
+                <div class="error-message hidden text-red-500 text-sm"></div>
+            </div>
+            <button type="submit" class="w-full bg-[var(--amber)] text-[var(--navy)] py-4 font-black text-xl neo hover:shadow-2xl">
+                <span id="submitText">SEND MESSAGE</span>
+                <span id="submitSpinner" class="hidden">
+                    <i class="fas fa-spinner fa-spin"></i> SENDING...
+                </span>
+            </button>
+        </form>
+        <div id="formSuccess" class="hidden mt-6 p-4 bg-green-500/20 border-2 border-green-500 text-green-500 text-center rounded">
+            Message sent successfully! I'll get back to you soon.
+        </div>
+        <div id="formError" class="hidden mt-6 p-4 bg-red-500/20 border-2 border-red-500 text-red-500 text-center rounded">
+            There was an error sending your message. Please try again or email directly.
+        </div>
+        <pre id="contactDebug" class="hidden mt-4 p-3 text-xs bg-[rgba(0,0,0,0.4)] border border-[var(--amber)] rounded max-h-40 overflow-auto"></pre>
+        <div class="text-center mt-8">
+            <p class="text-lg">Or email me directly at:</p>
+            <a href="mailto:novapixeldev@gmail.com" class="text-[var(--amber)] font-mono text-lg hover:underline">novapixeldev@gmail.com</a>
+        </div>
+    </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="py-12 text-center border-t-4 border-[var(--amber)] bg-[var(--navy)]">
+    <div class="flex justify-center gap-6 mb-6">
+        <a href="mailto:novapixeldev@gmail.com" class="text-[var(--amber)] hover:text-white transition-colors" aria-label="Email">
+            <i class="fas fa-envelope text-2xl"></i>
+        </a>
+        <a href="https://github.com/HoodieGuy-lab" class="text-[var(--amber)] hover:text-white transition-colors" aria-label="GitHub">
+            <i class="fab fa-github text-2xl"></i>
+        </a>
+        <a href="https://x.com/NovaPixeI" class="text-[var(--amber)] hover:text-white transition-colors" aria-label="X (Twitter)">
+            <i class="fab fa-twitter text-2xl"></i>
+        </a>
+        <a href="https://www.instagram.com/dev.novapixel/" class="text-[var(--amber)] hover:text-white transition-colors" aria-label="Instagram">
+            <i class="fab fa-instagram text-2xl"></i>
+        </a>
+        <a href="https://discord.com/users/1219687309054705756" class="text-[var(--amber)] hover:text-white transition-colors" aria-label="Discord">
+            <i class="fab fa-discord text-2xl"></i>
+        </a>
+    </div>
+    <p class="text-sm opacity-70">© 2025 NovaPixel. Built with sweat & code.</p>
+</footer>
+
+<!-- MODALS -->
+<div id="modal-anonybox" class="fixed inset-0 bg-black/50 hidden flex items-center justify-center z-50">
+    <div class="neo p-8 bg-[var(--navy)] max-w-md w-full mx-4">
+        <h3 class="text-2xl font-bold mb-4">Anonybox Details</h3>
+        <p>Advanced anonymous messaging platform with real-time updates.</p>
+        <a href="https://hoodieguy-lab.github.io/AnonyBox/Index.html" class="mt-4 bg-[var(--amber)] text-[var(--navy)] px-4 py-2 inline-block">View on GitHub</a>
+        <button onclick="closeModal('anonybox')" class="mt-4 bg-[var(--gray)] text-white px-4 py-2">Close</button>
+    </div>
+</div>
+
+<div id="modal-store" class="fixed inset-0 bg-black/50 hidden flex items-center justify-center z-50">
+    <div class="neo p-8 bg-[var(--navy)] max-w-md w-full mx-4">
+        <h3 class="text-2xl font-bold mb-4">Store Management System</h3>
+        <p>Upcoming full-stack system for inventory and sales management. Will include real-time tracking, reporting, and user auth. Tech: React, Node, MongoDB.</p>
+        <button onclick="closeModal('store')" class="mt-4 bg-[var(--gray)] text-white px-4 py-2">Close</button>
+    </div>
+</div>
+
+<div id="modal-ecommerce" class="fixed inset-0 bg-black/50 hidden flex items-center justify-center z-50">
+    <div class="neo p-8 bg-[var(--navy)] max-w-md w-full mx-4">
+        <h3 class="text-2xl font-bold mb-4">E-Commerce Platform</h3>
+        <p>Full-stack online shopping app with cart, payments, and admin dashboard. Built with React, Node.js, Express, and Stripe integration.</p>
+        <a href="https://hoodieguy-lab.github.io/Ecommerce/Ecommerce.html" class="mt-4 bg-[var(--amber)] text-[var(--navy)] px-4 py-2 inline-block">Live Demo</a>
+        <button onclick="closeModal('ecommerce')" class="mt-4 bg-[var(--gray)] text-white px-4 py-2">Close</button>
+    </div>
+</div>
+
+<div id="modal-gamingpc" class="fixed inset-0 bg-black/50 hidden flex items-center justify-center z-50">
+    <div class="neo p-8 bg-[var(--navy)] max-w-md w-full mx-4">
+        <h3 class="text-2xl font-bold mb-4">Custom Gaming PC</h3>
+        <p>High-performance gaming rig with RTX 4090, liquid cooling, RGB lighting. Optimized for 4K gaming and streaming.</p>
+        <button onclick="closeModal('gamingpc')" class="mt-4 bg-[var(--gray)] text-white px-4 py-2">Close</button>
+    </div>
+</div>
+
+<script>
+/* TYPEWRITER */
+(() => {
+    const words = ["SYSTEMS", "WEBPAGES", "PCs", "SOLUTIONS"];
+    let currentIndex = 0;
+    const texts = document.querySelectorAll('.typewriter-text');
+    if (!texts || texts.length === 0) return;
+
+    function showNextWord() {
+        if (!texts[currentIndex]) return;
+        texts[currentIndex].classList.remove('active');
+        currentIndex = (currentIndex + 1) % words.length;
+        if (!texts[currentIndex]) return;
+        texts[currentIndex].classList.add('active');
+    }
+
+    // store interval id so it can be cleared if necessary
+    const twInterval = setInterval(showNextWord, 2000);
+    // clear interval on page unload to avoid keeping references
+    window.addEventListener('beforeunload', () => clearInterval(twInterval));
+})();
+
+/* PROGRESS BARS */
+try {
+    gsap.registerPlugin(ScrollTrigger);
+    gsap.utils.toArray('.bar-fill').forEach(bar => {
+        const target = bar.getAttribute('data-target') || '0%';
+        const parent = bar.closest('.skill-card');
+        gsap.to(bar, {
+            width: target,
+            duration: 1.5,
+            ease: "power2.out",
+            scrollTrigger: parent ? { trigger: parent, start: "top 80%" } : undefined
+        });
+    });
+} catch (err) {
+    // If GSAP or ScrollTrigger is not available, degrade gracefully
+    console.warn('GSAP animation skipped:', err?.message || err);
+}
+
+/* SMOOTH SCROLL */
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+        const href = a.getAttribute('href');
+        if (!href || href === '#') return;
+        e.preventDefault();
+        const target = document.querySelector(href);
+        if (target && typeof target.scrollIntoView === 'function') {
+            target.scrollIntoView({ behavior: 'smooth' });
+        }
+    });
+});
+
+/* SECTION FADE-IN */
+try {
+    gsap.utils.toArray('section').forEach(sec => {
+        gsap.from(sec, {
+            opacity: 0, y: 80, duration: 1.2, ease: "power3.out",
+            scrollTrigger: { trigger: sec, start: "top 80%", toggleActions: "play none none reverse" }
+        });
+    });
+} catch (err) {
+    // Ignore if GSAP not available
+}
+
+/* SUPABASE INIT */
+let supabase = null;
+try {
+    if (window.supabase && typeof window.supabase.createClient === 'function') {
+        supabase = window.supabase.createClient(
+            'https://twocvgsrzrdoxrpedlrq.supabase.co',
+            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR3b2N2Z3NyenJkb3hycGVkbHJxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjA5OTU1MTcsImV4cCI6MjA3NjU3MTUxN30.CM0U1sv2hPog0dy3cBZd7lpCQ1ZZHn3oNPxzoN8p4EE'
+        );
+    } else {
+        console.warn('Supabase client not available. Contact form will fall back to mailto.');
+    }
+} catch (err) {
+    console.error('Supabase init failed:', err);
+}
+
+/* CONTACT FORM */
+const contactForm = document.getElementById('contactForm');
+if (contactForm) {
+    contactForm.addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    document.querySelectorAll('.error-message').forEach(el => el.classList.add('hidden'));
+    document.getElementById('formSuccess').classList.add('hidden');
+    document.getElementById('formError').classList.add('hidden');
+    
+    const name = document.getElementById('contactName').value.trim();
+    const email = document.getElementById('contactEmail').value.trim();
+    const message = document.getElementById('contactMessage').value.trim();
+    
+    let isValid = true;
+    if (name.length < 2) { showError('contactName', 'Name must be at least 2 characters'); isValid = false; }
+    if (!email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) { showError('contactEmail', 'Please enter a valid email'); isValid = false; }
+    if (message.length < 10) { showError('contactMessage', 'Message must be at least 10 characters'); isValid = false; }
+    
+    if (!isValid) return;
+    
+    toggleSubmitButton(true);
+    
+        try {
+            if (supabase) {
+                const { error } = await supabase.from('messages').insert([{ name, email, message }]);
+                if (error) throw error;
+                document.getElementById('formSuccess').classList.remove('hidden');
+                contactForm.reset();
+            } else {
+                // Fallback: show instructions to mail directly
+                document.getElementById('formError').classList.remove('hidden');
+                const dbg = document.getElementById('contactDebug');
+                dbg.classList.remove('hidden');
+                dbg.textContent = 'Supabase client unavailable. Please email novapixeldev@gmail.com with your message.';
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            const formError = document.getElementById('formError');
+            if (formError) formError.classList.remove('hidden');
+            const dbg = document.getElementById('contactDebug');
+            if (dbg) {
+                dbg.classList.remove('hidden');
+                dbg.textContent = error?.message || JSON.stringify(error, null, 2);
+            }
+        } finally {
+            toggleSubmitButton(false);
+        }
+});
+}
+
+function showError(fieldId, message) {
+    const errorDiv = document.querySelector(`#${fieldId} + .error-message`);
+    errorDiv.textContent = message;
+    errorDiv.classList.remove('hidden');
+}
+
+function toggleSubmitButton(loading) {
+    const submitText = document.getElementById('submitText');
+    const submitSpinner = document.getElementById('submitSpinner');
+    const button = submitText.closest('button');
+    if (loading) {
+        submitText.classList.add('hidden');
+        submitSpinner.classList.remove('hidden');
+        button.disabled = true;
+    } else {
+        submitText.classList.remove('hidden');
+        submitSpinner.classList.add('hidden');
+        button.disabled = false;
+    }
+}
+
+/* MODAL FUNCTIONS */
+function openModal(id) {
+    const modal = document.getElementById(`modal-${id}`);
+    if (!modal) return;
+    modal.classList.remove('hidden');
+    modal.scrollTop = 0;
+}
+function closeModal(id) {
+    const modal = document.getElementById(`modal-${id}`);
+    if (!modal) return;
+    modal.classList.add('hidden');
+}
+
+// Close on backdrop
+document.querySelectorAll('[id^="modal-"]').forEach(modal => {
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) closeModal(modal.id.replace('modal-', ''));
+    });
+});
+
+/* NAVBAR */
+const menuBtn = document.getElementById('menuBtn');
+const mobileMenu = document.getElementById('mobileMenu');
+const closeMenu = document.getElementById('closeMenu');
+
+if (menuBtn && mobileMenu) {
+    menuBtn.addEventListener('click', () => mobileMenu.classList.add('active'));
+}
+if (closeMenu && mobileMenu) {
+    closeMenu.addEventListener('click', () => mobileMenu.classList.remove('active'));
+}
+document.querySelectorAll('#mobileMenu .nav-link').forEach(link => {
+    link.addEventListener('click', () => {
+        if (mobileMenu) mobileMenu.classList.remove('active');
+    });
+});
+
+window.addEventListener('scroll', () => {
+    const nav = document.getElementById('mainNav');
+    if (!nav) return;
+    nav.classList.toggle('nav-solid', window.scrollY > 50);
+    nav.classList.toggle('nav-transparent', window.scrollY <= 50);
+});
+
+const sections = document.querySelectorAll('section[id]');
+const navLinks = document.querySelectorAll('.nav-link');
+window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(sec => {
+        if (window.scrollY >= sec.offsetTop - 150) current = sec.getAttribute('id');
+    });
+    navLinks.forEach(link => {
+        const href = link.getAttribute('href') || '';
+        link.classList.toggle('active', href.slice(1) === current);
+    });
+});
+
+const progressBar = document.getElementById('scrollProgress');
+window.addEventListener('scroll', () => {
+    const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+    const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+    const scrolled = height > 0 ? (winScroll / height) * 100 : 0;
+    if (progressBar) progressBar.style.width = scrolled + '%';
+});
+
+/* MARQUEE */
+function initMarquee() {
+    const gallery = document.querySelector('.gallery');
+    if (!gallery || gallery.dataset.marquee === 'ready') return;
+
+    const parent = gallery.parentElement;
+    if (!parent) return;
+    const containerWidth = parent.clientWidth || window.innerWidth;
+    let totalWidth = gallery.scrollWidth || 0;
+    let duplicateCount = 0;
+
+    // Duplicate content conservatively: append clones instead of doubling innerHTML to avoid event loss
+    while (totalWidth < containerWidth * 2 && duplicateCount < 6) {
+        const clone = gallery.cloneNode(true);
+        // Move children from clone into gallery
+        Array.from(clone.children).forEach(child => gallery.appendChild(child.cloneNode(true)));
+        totalWidth = gallery.scrollWidth;
+        duplicateCount++;
+    }
+
+    const pixelsToScroll = Math.max(1, Math.floor(totalWidth / 2));
+    const duration = Math.max(12, Math.round(pixelsToScroll / 80));
+
+    const styleId = 'marquee-dynamic-style';
+    let styleTag = document.getElementById(styleId);
+    if (styleTag) styleTag.remove();
+
+    styleTag = document.createElement('style');
+    styleTag.id = styleId;
+    styleTag.innerHTML = `
+        @keyframes marquee-scroll {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-${pixelsToScroll}px); }
+        }
+        .gallery { animation: marquee-scroll ${duration}s linear infinite; }
+    `;
+    document.head.appendChild(styleTag);
+    gallery.dataset.marquee = 'ready';
+}
+
+window.addEventListener('load', initMarquee);
+window.addEventListener('resize', () => {
+    const style = document.getElementById('marquee-dynamic-style');
+    if (style) style.remove();
+    const g = document.querySelector('.gallery');
+    if (g) g.dataset.marquee = '';
+    setTimeout(initMarquee, 250);
+});
+</script>
+</body>
+</html>
